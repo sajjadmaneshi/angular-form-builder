@@ -1,0 +1,86 @@
+<ng-container [formGroup]="form">
+  <div [ngSwitch]="controller.controlType">
+    <div class="form-group validated mb-1"
+         [ngClass]="{'form-check':controller.controlType==formFieldType.checkBox}">
+
+      <label [attr.for]="controller.key">{{controller.label}}</label>
+
+      <ng-template [ngSwitchCase]="formFieldType.textBox">
+        <input class="form-control" [formControlName]="controller.key"
+               [placeholder]="controller.options?.placeholder"
+               [attr.id]="controller.key" type="text"
+               [ngClass]="{'is-invalid':this.form.get(controller.key)?.invalid}">
+
+      </ng-template>
+
+
+      <ng-template [ngSwitchCase]="formFieldType.numBox">
+        <input class="form-control" [formControlName]="controller.key"
+               [attr.id]="controller.key" type="number"
+               [ngClass]="{'is-invalid':this.form.get(controller.key)?.invalid}">
+      </ng-template>
+
+
+      <ng-template [ngSwitchCase]="formFieldType.textArea">
+        <textarea  class="form-control" [formControlName]="controller.key"
+
+              [id]="controller.key" [ngClass]="{'is-invalid':this.form.get(controller.key)?.invalid}">
+        </textarea>
+      </ng-template>
+
+
+      <ng-template [ngSwitchCase]="formFieldType.datePicker">
+        <input class="form-control"
+               [placeholder]="controller.options?.placeholder"
+               ngbDatepicker #d="ngbDatepicker"
+               [formControlName]="controller.key"
+               [attr.id]="controller.key"
+               (click)="d.toggle()"
+               [ngClass]="{'is-invalid':this.form.get(controller.key)?.invalid}"
+        />
+      </ng-template>
+
+      <ng-template [ngSwitchCase]="formFieldType.rangeDatePicker">
+        <app-date-picker-range [formControlName]="controller.key"></app-date-picker-range>
+      </ng-template>
+
+      <ng-template [ngSwitchCase]="formFieldType.checkBox">
+        <input class="form-check-input" [formControlName]="controller.key"
+               [attr.id]="controller.key" type="checkbox"
+               [ngClass]="{'is-invalid':this.form.get(controller.key)?.invalid}">
+      </ng-template>
+
+      <ng-template [ngSwitchCase]="formFieldType.radioButton">
+        <div *ngFor="let element of controller.options?.elements"  [ngClass]="{'is-invalid':this.form.get(controller.key)?.invalid}">
+          <input    [attr.id]="element" type="radio" class="form-check-input" [value]="element" [name]="controller.key"
+                 [formControlName]="controller.key">
+          <label class="custom-control-label" [attr.for]="element">{{element}}</label>
+        </div>
+
+      </ng-template>
+
+      <ng-template [ngSwitchCase]="formFieldType.dropDown">
+        <select class="form-control" [attr.id]="controller.key"
+                [ngClass]="{'is-invalid':this.form.get(controller.key)?.invalid}"
+                [formControlName]="controller.key">
+          <option value="" disabled selected>{{controller.options?.placeholder}}</option>
+          <option *ngFor="let opt of controller.options?.options" [value]="opt.key">{{opt.value}}</option>
+        </select>
+      </ng-template>
+
+
+      <ng-template [ngIf]="this.form.get(controller.key)?.errors?.['required']">
+        <div class="invalid-feedback">the {{controller.label}} is required</div>
+      </ng-template>
+
+
+      <ng-template [ngIf]="this.form.get(controller.key)?.errors?.['pattern']">
+        <div class="invalid-feedback">the {{controller.label}} is invalid</div>
+      </ng-template>
+
+    </div>
+
+
+  </div>
+
+</ng-container>

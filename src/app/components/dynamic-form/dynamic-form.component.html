@@ -1,0 +1,23 @@
+
+<form (ngSubmit)="onSubmit()"  [formGroup]="form">
+
+  <div *ngFor="let formField of formData?.fields|async" class="form-row">
+    <app-dynamic-form-control [controller]="formField" [form]="form"></app-dynamic-form-control>
+  </div>
+
+  <ng-template [ngIf]="formData?.actionType!=actionType.view">
+    <div  class="form-row text-center" [ngSwitch]="formData?.actionType">
+      <ng-template [ngSwitchCase]="actionType.add">
+        <button class="btn btn-success" type="submit" [disabled]="formData?.actionAccess!=accessLevel">add</button>
+      </ng-template>
+      <ng-template [ngSwitchCase]="actionType.edit">
+        <button class="btn btn-warning" type="submit" [disabled]="formData?.actionAccess!=accessLevel">edit</button>
+      </ng-template>
+
+    </div>
+
+
+
+  </ng-template>
+
+</form>
